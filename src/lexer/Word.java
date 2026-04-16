@@ -1,18 +1,24 @@
 package lexer;
 
-public class Word extends Token{
+public class Word extends Token {
+
     public String lexeme = "";
-    public Word(String s, int tag){
+
+    public Word(String s, int tag) {
         super(tag);
         lexeme = s;
     }
-    public static final Word
-    and = new Word("&&", Tag.AND),
-    or = new Word("||", Tag.OR),
-    eqequal = new Word("==", Tag.EQEQUAL),
-    dif = new Word("<>", Tag.DIF),
-    lesseq = new Word("<=", Tag.LESSEQ),
-    greatereq = new Word(">=", Tag.GREATEREQ),
-    True = new Word("true", Tag.TRUE),
-    False = new Word("false", Tag.FALSE);
+
+    @Override
+    public String toString() {
+        return lexeme;
+    }
+
+    public static final Word assign = new Word(":=", Tag.ASSIGN),
+            le = new Word("<=", Tag.LE),
+            ge = new Word(">=", Tag.GE),
+            ne = new Word("<>", Tag.NE),
+            and = new Word("and", Tag.AND),
+            or = new Word("or", Tag.OR),
+            not = new Word("not", Tag.NOT);
 }

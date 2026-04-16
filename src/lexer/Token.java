@@ -1,11 +1,18 @@
 package lexer;
 
 public class Token {
+
     public final int tag;
-    public Token(int t){
+
+    public Token(int t) {
         tag = t;
     }
-    public String toString(){
-        return "" + (char)tag;
+
+    @Override
+    public String toString() {
+        if (tag < 256) {
+            return "" + (char) tag;
+        }
+        return "" + tag;
     }
 }

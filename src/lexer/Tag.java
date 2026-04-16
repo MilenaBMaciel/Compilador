@@ -1,26 +1,27 @@
 package lexer;
 
 public class Tag {
-    //abaixo de 255 são os caracteres da ascii normais
-    public final static int
-        ID = 256,
-        REAL = 257,
-        NUM = 258,
-        BASIC = 259,
-        IF = 260,
-        ELSE = 261,
-        DO = 262,
-        WHILE = 263,
-        REPEAT = 263,
-        UNTIL = 264,
-        READ = 265,
-        WRITE = 266,
-        GREATEREQ = 267,
-        LESSEQ = 268,
-        DIF = 268,
-        EQEQUAL = 269,
-        OR = 270,
-        AND = 271,
-        TRUE = 272,
-        FALSE = 273;
+
+    public static final int EOF = 65535,
+            BASIC = 256,
+            ID = 257,
+            NUM = 258,
+            REAL = 259,
+            LITERAL = 260,
+            CLASS = 261,
+            IF = 262,
+            ELSE = 263,
+            DO = 264,
+            WHILE = 265,
+            REPEAT = 266,
+            UNTIL = 267,
+            READ = 268,
+            WRITE = 269,
+            AND = 270,
+            OR = 271,
+            NOT = 272,
+            ASSIGN = 273, // :=
+            LE = 274, // <=
+            GE = 275, // >=
+            NE = 276; // <>
 }
