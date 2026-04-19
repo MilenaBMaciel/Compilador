@@ -2,10 +2,13 @@ package lexer;
 
 import java.io.IOException;
 import java.util.Hashtable;
+import symbols.*;
 
 public class Lexer {
 
     public static int line = 1;
+
+    int curr = ' ';
     char peek = ' ';
     Hashtable<String, Word> words = new Hashtable<>();
 
@@ -37,12 +40,15 @@ public class Lexer {
     }
 
     void readch() throws IOException {
-        peek = (char) System.in.read();
+        curr = System.in.read();
+        if (curr != -1) {
+            peek = (char) curr;
+        }
     }
 
     boolean readch(char c) throws IOException {
         readch();
-        if (peek != c) {
+        if (curr == -1 || peek != c) {
             return false;
         }
         peek = ' ';
@@ -51,17 +57,15 @@ public class Lexer {
 
     public Token scan() throws IOException {
         for (;; readch()) {
-            if (peek == ' ' || peek == '\t' || peek == '\r') {
+            if (curr == -1) {
+                return new Token(Tag.EOF);
+            } else if (peek == ' ' || peek == '\t' || peek == '\r') {
                 continue;
             } else if (peek == '\n') {
-                line = line + 1;
+                line++;
             } else {
                 break;
             }
-        }
-
-        if ((int) peek == -1) {
-            return new Token(Tag.EOF);
         }
 
         // Comentários
@@ -71,27 +75,28 @@ public class Lexer {
                 case '/':
                     do {
                         readch();
-                    } while (peek != '\n' && (int) peek != -1);
+                    } while (curr != -1 && peek != '\n');
 
                     if (peek == '\n') {
-                        line = line + 1;
+                        line++;
                     }
                     return scan();
 
                 case '*':
-                    char ant = ' ';
+                    char ant = '\0';
                     for (;;) {
                         readch();
 
-                        if ((int) peek == -1) {
+                        if (curr == -1) {
                             return new Token(Tag.EOF);
                         }
 
                         if (peek == '\n') {
-                            line = line + 1;
+                            line++;
                         }
 
                         if (ant == '*' && peek == '/') {
+                            readch();
                             return scan();
                         }
 
@@ -114,10 +119,10 @@ public class Lexer {
 
             case '<':
                 readch();
-                if (peek == '=') {
+                if (curr != -1 && peek == '=') {
                     readch();
                     return Word.le;
-                } else if (peek == '>') {
+                } else if (curr != -1 && peek == '>') {
                     readch();
                     return Word.ne;
                 } else {
@@ -143,7 +148,7 @@ public class Lexer {
             do {
                 v = 10 * v + Character.digit(peek, 10);
                 readch();
-            } while (Character.isDigit(peek));
+            } while (curr != -1 && Character.isDigit(peek));
 
             if (peek != '.') {
                 return new Num(v);
@@ -153,7 +158,7 @@ public class Lexer {
             float d = 10;
             readch();
 
-            if (!Character.isDigit(peek)) {
+            if (curr == -1 || !Character.isDigit(peek)) {
                 return new Num(v);
             }
 
@@ -161,7 +166,7 @@ public class Lexer {
                 x = x + Character.digit(peek, 10) / d;
                 d = d * 10;
                 readch();
-            } while (Character.isDigit(peek));
+            } while (curr != -1 && Character.isDigit(peek));
 
             return new Real(x);
         }
@@ -171,7 +176,7 @@ public class Lexer {
             StringBuffer b = new StringBuffer();
             readch();
 
-            while (peek != '"' && peek != '\n' && (int) peek != -1) {
+            while (curr != -1 && peek != '"' && peek != '\n') {
                 b.append(peek);
                 readch();
             }
@@ -189,7 +194,7 @@ public class Lexer {
             do {
                 b.append(peek);
                 readch();
-            } while (Character.isLetterOrDigit(peek));
+            } while (curr != -1 && Character.isLetterOrDigit(peek));
 
             String s = b.toString();
             Word w = words.get(s);
