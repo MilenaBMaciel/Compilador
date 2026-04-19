@@ -1,6 +1,10 @@
 
 import java.io.IOException;
-import lexer.*;
+import java.util.Map;
+import lexer.Lexer;
+import lexer.Tag;
+import lexer.Token;
+import lexer.Word;
 
 public class Main {
 
@@ -12,18 +16,19 @@ public class Main {
 
         do {
             tok = lexer.scan();
+
             if (tok.tag == Tag.EOF) {
                 System.out.println("EOF");
             } else {
                 System.out.println(tok);
             }
+
         } while (tok.tag != Tag.EOF);
 
-        System.out.println("\n\nTABELA DE SIMBOLOS:");
+        System.out.println("\nTABELA DE SIMBOLOS:");
 
-        for (String key : lexer.getWords().keySet()) {
-            Word w = lexer.getWords().get(key);
-            System.out.println(key + " => " + w.tag);
+        for (Map.Entry<String, Word> entry : lexer.getWords().entrySet()) {
+            System.out.println(entry.getKey() + " => " + entry.getValue().tag);
         }
     }
 }

@@ -23,5 +23,6 @@ public class Tag {
             ASSIGN = 273, // :=
             LE = 274, // <=
             GE = 275, // >=
-            NE = 276; // <>
+            NE = 276, // <>
+            INDEX = 277; // []
 }
